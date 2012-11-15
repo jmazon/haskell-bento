@@ -42,16 +42,15 @@ pitchToFreq La' = 880.0000000000003
 pitchToFreq' p = 440 * 2 ** (n/12)
   where n = fromIntegral $ fromEnum p
 
-pitchesToSSong ps = map pitchToFreq' ps
-type SimpleSong = [Freq]
-sSongToWave = concatMap (take 22050 . sineWave)
+freqToNote :: Freq -> Wave
+freqToNote f = take 22050 (sineWave (pitchToFreq f))
+sSongToWave = concatMap freqToNote
 
 ssSample = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
 -- serialize (sSongToWave (pitchesToSSong ssSample))
 pbSample = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 -- serialize "
 pbSSong = pitchesToSSong pbSample
-pbSSong' = map (/2) pbSSong
 -- serialize (sSongToWave pbSSong')
 
 
