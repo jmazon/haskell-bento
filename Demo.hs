@@ -1,4 +1,5 @@
 -- Gloss over this for now
+{-# LANGUAGE TypeSynonymInstances #-}
 import WaveExport
 import Data.Char
 
@@ -43,6 +44,9 @@ pitchToFreq LaB = 830.6093951598906
 pitchToFreq La' = 880.0000000000003
 -- Important: pattern matching
 
+-- Play a sine by pitch
+-- > dump (sineWave (pitchToFreq Do))
+
 -- Play a scale
 bpScale :: [BPitch]
 bpScale = [La,Si,DoD,Re,Mi,FaD,LaB,La']
@@ -56,6 +60,14 @@ playBPitch p = take 22050 $ sineWave $ pitchToFreq p
 
 playBPList :: [BPitch] -> Wave
 playBPList = concatMap playBPitch
+
+-- Important: typeclasses
+class Playable p where play :: p -> Wave
+instance Playable Freq where play = playFreq
+instance Playable BPitch where play = playBPitch
+
+instance Playable p => Playable [p] where play = concatMap play
+
 
 -- pitchToFreq' :: BPitch -> Freq
 pitchToFreq' p = 440 * 2 ** (n/12)
