@@ -18,12 +18,12 @@ serialize w = B.writeFile "audiodump" (runPut (mapM_ putFloat32le w))
 
 -- $ aplay -t raw -r 44100 -f FLOAT_LE audiodump
 
-data Pitch = La  | SiB | Si | Do  | DoD | Re
-           | MiB | Mi  | Fa | FaD | Sol | LaB | La'
-             deriving Enum
+data BPitch = La  | SiB | Si | Do  | DoD | Re
+            | MiB | Mi  | Fa | FaD | Sol | LaB | La'
+              deriving Enum
 
 -- take 13 $ iterate (* 2 ** (1/12)) 440
-pitchToFreq :: Pitch -> Freq
+pitchToFreq :: BPitch -> Freq
 pitchToFreq La  = 440.0
 pitchToFreq SiB = 466.1637615180899
 pitchToFreq Si  = 493.8833012561241
@@ -38,7 +38,7 @@ pitchToFreq Sol = 783.9908719634989
 pitchToFreq LaB = 830.6093951598906
 pitchToFreq La' = 880.0000000000003
 
-pitchToFreq' :: Pitch -> Freq
+-- pitchToFreq' :: BPitch -> Freq
 pitchToFreq' p = 440 * 2 ** (n/12)
   where n = fromIntegral $ fromEnum p
 
