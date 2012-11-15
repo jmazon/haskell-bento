@@ -43,15 +43,12 @@ pitchToFreq' p = 440 * 2 ** (n/12)
   where n = fromIntegral $ fromEnum p
 
 freqToNote :: Freq -> Wave
-freqToNote f = take 22050 (sineWave (pitchToFreq f))
+freqToNote f = take 22050 (sineWave f)
 sSongToWave = concatMap freqToNote
 
 ssSample = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
 -- serialize (sSongToWave (pitchesToSSong ssSample))
 pbSample = [La', Mi, FaD, DoD, Re, La, Re, Mi]
--- serialize "
-pbSSong = pitchesToSSong pbSample
--- serialize (sSongToWave pbSSong')
 
 
 -- TBD: find something on abcnotation.com that would mingle with pbSSong
