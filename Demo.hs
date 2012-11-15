@@ -1,7 +1,5 @@
-import Data.Binary.Put
-import Data.Binary.IEEE754
-import qualified Data.ByteString.Lazy as B
 import Data.Char
+import WaveExport
 
 type Freq = Float
 type Sample = Float
@@ -14,9 +12,6 @@ makeSample f n = sin(f * indexToPhase(n)) -- expressions can look like C
 
 sineWave :: Freq -> Wave
 sineWave f = map (makeSample f) [0..]     -- partial application
-
--- skip on this or move to other file
-serialize w = B.writeFile "audiodump" (runPut (mapM_ putFloat32le w))
 
 -- $ aplay -t raw -r 44100 -f FLOAT_LE audiodump
 
@@ -48,7 +43,7 @@ freqToNote f = take 22050 (sineWave f)
 sSongToWave = concatMap freqToNote
 
 ssSample = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
--- serialize (sSongToWave (pitchesToSSong ssSample))
+-- dump (sSongToWave (pitchesToSSong ssSample))
 pbSample = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 
 
