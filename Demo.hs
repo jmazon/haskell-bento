@@ -1,6 +1,7 @@
 -- Gloss over this for now
 {-# LANGUAGE TypeSynonymInstances #-}
 import WaveExport
+import Data.Char
 
 -- Accoustics basics
 type Sample = Float
