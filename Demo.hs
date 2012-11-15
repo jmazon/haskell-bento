@@ -19,6 +19,7 @@ sineWave f = map (makeSample f) [0..]
 --            recursive (potentially infinite structure)
 -- Optional: partial application
 
+-- Demo
 -- > dump (sineWave 440)
 -- $ aplay -t raw -r 44100 -f FLOAT_LE audiodump
 
@@ -44,10 +45,9 @@ pitchToFreq LaB = 830.6093951598906
 pitchToFreq La' = 880.0000000000003
 -- Important: pattern matching
 
--- Play a sine by pitch
+-- Demo: play a sine by pitch
 -- > dump (sineWave (pitchToFreq Do))
 
--- Play a scale
 bpScale :: [BPitch]
 bpScale = [La,Si,DoD,Re,Mi,FaD,LaB,La']
 -- (I *know* about enharmonics, but not now!)
@@ -61,6 +61,9 @@ playBPitch p = take 22050 $ sineWave $ pitchToFreq p
 playBPList :: [BPitch] -> Wave
 playBPList = concatMap playBPitch
 
+-- Demo: play a scale
+-- > dump (playBPList bpScale)
+
 -- Important: typeclasses
 class Playable p where play :: p -> Wave
 instance Playable Freq where play = playFreq
@@ -68,6 +71,15 @@ instance Playable BPitch where play = playBPitch
 
 instance Playable p => Playable [p] where play = concatMap play
 
+-- Demo: play pseudo-random frequencies
+-- > dump (play [440.0,460..600])
+
+-- Important: Enums (like that list range above)
+-- Demo: [La .. La']
+pbDemo = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
+-- > dump $ play pbDemo
+-- > dump $ play $ map succ pbDemo
+-- > dump . play . map (pred . pred . pred) $ pbDemo
 
 -- pitchToFreq' :: BPitch -> Freq
 pitchToFreq' p = 440 * 2 ** (n/12)
@@ -77,7 +89,7 @@ freqToNote :: Freq -> Wave
 freqToNote f = take 22050 (sineWave f)
 sSongToWave = concatMap freqToNote
 
-ssSample = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
+
 -- dump (sSongToWave (pitchesToSSong ssSample))
 pbSample = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 
