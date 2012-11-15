@@ -80,16 +80,18 @@ ssSample = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
 -- dump (sSongToWave (pitchesToSSong ssSample))
 pbSample = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 
-
 -- TBD: find something on abcnotation.com that would mingle with pbSSong
 --      implement rests
 --      implement durations
 
+type Octave = Int
+type Pitch = (BPitch, Octave)
+
 data Event = Event Int (Maybe Pitch)
              deriving (Show)
 
-readPitch :: Char -> Maybe Pitch
-readPitch p = case p of
+readBPitch :: Char -> Maybe BPitch
+readBPitch p = case p of
                 'A' -> Just La
                 _   -> Nothing
 
@@ -98,9 +100,13 @@ readDigit d | isDigit d = Just $ (ord d) - (ord '0')
 readDigit _ = Nothing
 
 readEvent :: String -> Maybe Event
-readEvent (d:p:[]) = case readDigit d of
-                       Just d' -> Just $ Event d' (readPitch p)
-                       _       -> Nothing
+readEvent (d:bp:o:[]) = do
+  d' <- readDigit d
+  case readBPitch bp of
+    Just bp' -> do
+         o' <- readDigit o
+         return $ Event d' (Just (bp', o'))
+    _ -> return $ Event d' Nothing
 readEvent _ = Nothing
 
 readScore :: String -> Maybe [Event]
