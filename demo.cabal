@@ -1,0 +1,9 @@
+Name:          demo
+Version:       0.1
+Build-Type:    Simple
+Cabal-Version: >=1.14.0
+Executable demo
+  Main-is:     Demo.hs
+  Default-Language: Haskell2010
+  Build-Depends:
+    base, bytestring, data-binary-ieee754, binary
