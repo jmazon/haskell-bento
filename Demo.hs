@@ -83,6 +83,7 @@ pbDemo2 = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 -- > dump $ play $ map succ pbDemo
 -- > dump . play . map (pred . pred . pred) $ pbDemo
 
+-- Optional: rewrite pitchToFreq using Enum
 -- pitchToFreq' :: BPitch -> Freq
 pitchToFreq' p = 440 * 2 ** (n/12)
   where n = fromIntegral $ fromEnum p
