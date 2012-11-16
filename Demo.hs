@@ -114,7 +114,7 @@ fullPitchToFreq (p,o) = pitchToFreq p * 2 ** (fromIntegral o - 4)
 -- Optional: the same using with Enum
 noteWave :: Maybe Pitch -> Wave
 noteWave n = maybe (repeat 0) sineWave (fmap fullPitchToFreq n)
-bpm = 80
+bpm = 60
 instance Playable Event where
     play e = take (round $ rate * 60 / 8 / bpm
                            * (fromIntegral (eventDuration e)))
@@ -180,7 +180,6 @@ kanon = "8F4 8e4 8d4 8C4 " ++
         "4__ 4a4 4__ 4a4 4__ 4F3 4__ 4a4 " ++
         "4__ 4g3 4__ 4F3 4__ 4g3 4__ 4e4" :: String
 
-main = undefined
 
 -- ugly support code (would be less ugly if we could remove La' from
 -- BPitch, but that would mess up with too many of the early examples)
@@ -205,3 +204,11 @@ eDemo2'' = map (\bp -> Event 8 (fmap (succ . succ . succ . succ . succ) (Just (b
 ovb (pb,o) = (pb,o-1)
 -- > let m = map (/2) $ zipWith (+) (play $ cycle eDemo2'') (play (readScore kanon))
 -- > dump m
+b = cycle eDemo2''
+Just k = readScore kanon
+v1 = (Event 64 Nothing : k)
+v2 = (Event 64 Nothing : v1)
+v3 = (Event 64 Nothing : v2)
+i1 = map (/2) $ zipWith (+) (play b) (play v1)
+i2 = map (/2) $ zipWith (+) (play v2) (play v3)
+t = map (/2) $ zipWith (+) i1 i2
