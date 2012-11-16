@@ -122,11 +122,22 @@ instance Playable Event where
 
 readBPitch :: Char -> Maybe BPitch
 readBPitch p = case p of
-                'A' -> Just La
+                'a' -> Just La
+                'A' -> Just SiB
+                'b' -> Just Si
+                'c' -> Just Do
+                'C' -> Just DoD
+                'd' -> Just Re
+                'D' -> Just MiB
+                'e' -> Just Mi
+                'f' -> Just Fa
+                'F' -> Just FaD
+                'g' -> Just Sol
+                'G' -> Just LaB
                 _   -> Nothing
 
 readDigit :: Char -> Maybe Int
-readDigit d | isDigit d = Just $ (ord d) - (ord '0') -- JB: digitToInt?
+readDigit d | isDigit d = Just $ digitToInt d
 readDigit _ = Nothing
 
 readEvent :: String -> Maybe Event
@@ -141,3 +152,8 @@ readEvent _ = Nothing
 
 readScore :: String -> Maybe [Event]
 readScore = mapM readEvent . words
+
+kanon = "8F4 8e4 8d4 8C4 " ++ "8b4 8a4 8b4 8C4 " ++ "8d4 8C4 8b4 8a4 " ++ "8g3 8F3 8g3 8e3 " ++
+        "4d3 4F3 4a3 4g3 4F3 4d3 4F3 4e3 " ++ "4d3 4b3 4d3 4a3 "
+
+main = undefined
