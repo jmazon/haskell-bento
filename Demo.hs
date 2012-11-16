@@ -2,6 +2,7 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 import WaveExport
 import Data.Char
+import LetItBe
 
 -- Accoustics basics
 type Sample = Float
