@@ -97,10 +97,9 @@ instance Playable p => Playable (Maybe p) where
 -- Demo: replace some notes in pbDemo with rests
 --       then the same with a map call
 
+-- How to transpose a [Maybe BPitch]?
+-- Important: Functor
 
--- TBD: find something on abcnotation.com that would mingle with pbSSong
---      implement rests
---      implement durations
 
 type Octave = Int
 type Pitch = (BPitch, Octave)
