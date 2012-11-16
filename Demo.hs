@@ -113,7 +113,7 @@ readBPitch p = case p of
                 _   -> Nothing
 
 readDigit :: Char -> Maybe Int
-readDigit d | isDigit d = Just $ (ord d) - (ord '0')
+readDigit d | isDigit d = Just $ (ord d) - (ord '0') -- JB: digitToInt?
 readDigit _ = Nothing
 
 readEvent :: String -> Maybe Event
