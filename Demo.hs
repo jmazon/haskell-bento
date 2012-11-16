@@ -88,10 +88,14 @@ pbDemo2 = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 pitchToFreq' p = 440 * 2 ** (n/12)
   where n = fromIntegral $ fromEnum p
 
-freqToNote :: Freq -> Wave
-freqToNote f = take 22050 (sineWave f)
-sSongToWave = concatMap freqToNote
+-- Handling rests
+-- Important: Maybe
+instance Playable p => Playable (Maybe p) where
+    play (Just p) = play p
+    play Nothing = replicate 22050 0
 
+-- Demo: replace some notes in pbDemo with rests
+--       then the same with a map call
 
 
 -- TBD: find something on abcnotation.com that would mingle with pbSSong
