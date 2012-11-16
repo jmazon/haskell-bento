@@ -100,12 +100,25 @@ instance Playable p => Playable (Maybe p) where
 -- How to transpose a [Maybe BPitch]?
 -- Important: Functor
 
-
-type Octave = Int
-type Pitch = (BPitch, Octave)
-
-data Event = Event Int (Maybe Pitch)
+-- Putting it all together
+-- Important: record
+data Event = Event { eventDuration :: Int
+                   , eventNote     :: Maybe Pitch }
              deriving (Show)
+type Pitch = (BPitch,Octave)
+type Octave = Int
+
+fullPitchToFreq :: Pitch -> Freq
+fullPitchToFreq (p,o) = pitchToFreq p * 2 ** (fromIntegral o - 4)
+-- Optional: the same using with Enum
+noteWave :: Maybe Pitch -> Wave
+noteWave n = maybe (repeat 0) sineWave (fmap fullPitchToFreq n)
+bpm = 80
+instance Playable Event where
+    play e = take (round $ rate * 60 / bpm * (fromIntegral (eventDuration e)))
+                  (noteWave (eventNote e))
+
+-- Demo
 
 readBPitch :: Char -> Maybe BPitch
 readBPitch p = case p of
