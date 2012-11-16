@@ -1,5 +1,5 @@
 -- Gloss over this for now
-{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 import WaveExport
 import Data.Char
 import LetItBe
@@ -159,3 +159,13 @@ kanon = "8F4 8e4 8d4 8C4 " ++ "8b4 8a4 8b4 8C4 " ++ "8d4 8C4 8b4 8a4 " ++ "8g3 8
         "4d3 4F3 4a3 4g3 4F3 4d3 4F3 4e3 " ++ "4d3 4b3 4d3 4a3 "
 
 main = undefined
+
+-- ugly support code (would be less ugly if we could remove La' from
+-- BPitch, but that would mess up with too many of the early examples)
+instance Enum Pitch where
+    succ (LaB,o) = (La,o+1)
+    succ (bp,o)  = (succ bp,o)
+    pred (La,o)  = (LaB,o-1)
+    pred (bp,o)  = (pred bp,o)
+    fromEnum (bp,o) = 12*o + fromEnum bp
+    toEnum n = (toEnum bp,o) where (o,bp) = n `divMod` 12
