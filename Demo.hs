@@ -208,21 +208,24 @@ polyPhonyDemo = mix (play $ readScore letItBe) (play letItBeBase)
 -- > dump polyPhonyDemo
 
 -- Demo: some well-known canon tune
-Just canonVoice = readScore kanon
 canonBase = map f  pbDemo2
     where f bp = Event 8 (transpose $ bPitchToPitch bp)
-          bPitchToPitch bp = Just (bp,3)
+          -- small win since the live demo: lower the base to pseudooctave 2
+          bPitchToPitch bp = Just (bp,2)
           transpose = fmap (succ . succ . succ . succ . succ) -- la -> re
+Just canonVoice = readScore kanon
 
+-- creating long lists of Floats in GHCi could prove deadly, so we
+-- keep all Waves undere here
 dumpCanonWave = dump (mix i1 i2) where
-    -- creating long lists of Floats in GHCi could prove deadly
     vb, v1, v2, v3 :: [Event]
     vb = cycle canonBase
     v1 = Event 64 Nothing : canonVoice
     v2 = Event 64 Nothing : v1
     v3 = Event 64 Nothing : v2
-    i1 = mix (play vb) (play v1)
-    i2 = mix (play v2) (play v3)
+    -- small win since the live demo: halve all non-base voices' amplitude
+    i1 = mix (play vb) (map (/2) $ play v1)
+    i2 = map (/2) $ mix (play v2) (play v3)
 -- > dumpCanonWave
 
 -- Exercices while you have a sound generation framework at hand.
