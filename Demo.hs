@@ -116,7 +116,8 @@ noteWave :: Maybe Pitch -> Wave
 noteWave n = maybe (repeat 0) sineWave (fmap fullPitchToFreq n)
 bpm = 80
 instance Playable Event where
-    play e = take (round $ rate * 60 / bpm * (fromIntegral (eventDuration e)))
+    play e = take (round $ rate * 60 / 8 / bpm
+                           * (fromIntegral (eventDuration e)))
                   (noteWave (eventNote e))
 
 -- Demo
@@ -138,7 +139,7 @@ readBPitch p = case p of
                 _   -> Nothing
 
 readDigit :: Char -> Maybe Int
-readDigit d | isDigit d = Just $ digitToInt d
+readDigit d | isHexDigit d = Just $ digitToInt d
 readDigit _ = Nothing
 
 readEvent :: String -> Maybe Event
