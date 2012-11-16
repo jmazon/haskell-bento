@@ -77,6 +77,8 @@ instance Playable p => Playable [p] where play = concatMap play
 -- Important: Enums (like that list range above)
 -- Demo: [La .. La']
 pbDemo = [Do, Do, Do, Re, Mi, Mi, Re, Re, Do, Mi, Re, Re, Do, Do, Do, Do]
+pbDemo2 = [La', Mi, FaD, DoD, Re, La, Re, Mi]
+
 -- > dump $ play pbDemo
 -- > dump $ play $ map succ pbDemo
 -- > dump . play . map (pred . pred . pred) $ pbDemo
@@ -90,8 +92,6 @@ freqToNote f = take 22050 (sineWave f)
 sSongToWave = concatMap freqToNote
 
 
--- dump (sSongToWave (pitchesToSSong ssSample))
-pbSample = [La', Mi, FaD, DoD, Re, La, Re, Mi]
 
 -- TBD: find something on abcnotation.com that would mingle with pbSSong
 --      implement rests
