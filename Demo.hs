@@ -131,7 +131,9 @@ noteWave n = maybe (repeat 0) sineWave (fmap fullPitchToFreq n)
 bpm = 60 -- beats per minute
 
 instance Playable Event where
-    play e = take nbSamples freq
+    -- small win since the live demo:
+    -- don't play 100% of the full duration
+    play e = take (nbSamples - 500) freq ++ replicate 500 0
         where nbSamples = round (rate * 60 / 8 / bpm
                                  * (fromIntegral (eventDuration e)))
               freq = noteWave (eventNote e)
